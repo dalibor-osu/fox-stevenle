@@ -1,0 +1,6 @@
+﻿services:
+  foxstevenle.api:
+    image: foxstevenle.api
+    build:
+      context: .
+      dockerfile: FoxStevenle.API/Dockerfile

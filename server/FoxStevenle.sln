@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoxStevenle.API", "FoxStevenle.API\FoxStevenle.API.csproj", "{1383AA70-9E1F-4FB5-8AA2-ACEDFC420ED5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82F79142-D32B-4DDA-89CD-9729CD8C43FC}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1383AA70-9E1F-4FB5-8AA2-ACEDFC420ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1383AA70-9E1F-4FB5-8AA2-ACEDFC420ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1383AA70-9E1F-4FB5-8AA2-ACEDFC420ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1383AA70-9E1F-4FB5-8AA2-ACEDFC420ED5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
