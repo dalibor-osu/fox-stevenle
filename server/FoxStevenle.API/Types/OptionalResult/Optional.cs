@@ -1,3 +1,5 @@
+using FoxStevenle.API.Models.DataTransferObjects;
+
 namespace FoxStevenle.API.Types.OptionalResult;
 
 public class Optional<T>
@@ -14,6 +16,7 @@ public class Optional<T>
             return _value!;
         }
     }
+
     public OptionalError Error
     {
         get
@@ -22,10 +25,11 @@ public class Optional<T>
             {
                 throw new InvalidOperationException();
             }
-            
+
             return _error!;
         }
     }
+
     public bool HasValue => !Equals(_value, default(T));
 
     private readonly T? _value;
@@ -42,4 +46,7 @@ public class Optional<T>
         _error = error;
         _value = default;
     }
+
+    public ErrorMessageWrapper GetErrorMessageWrapper() => new()
+        { ErrorMesage = _error?.Message ?? throw new InvalidOperationException() };
 }

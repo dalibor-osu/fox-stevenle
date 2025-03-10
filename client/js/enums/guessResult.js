@@ -9,3 +9,5 @@ const guessResult = {
     2: "fail",
   }
 }
+
+export default guessResult;

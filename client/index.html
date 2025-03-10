@@ -11,20 +11,15 @@
     <div class="header">
       <h1 class="header-text">Fox Stevenle</h1>
     </div>
-    <div>
+    <div class="guess-form-container">
       <form id="guess-form">
         <input id="guess-input" type="text" />
       </form>
     </div>
     <div class="hint-container" id="hint-container">
-      <div class="hint-row">
-        <div class="hint" id="hint-0">
-          <audio class="player" id="target-0" controls>
-            <source src="0.mp3" type="audio/mp3" />
-          </audio>
-          <div class="hint-disable" id="hint-disable-0" />
-        </div>
-      </div>
+      <div is="hint-player" id="0"></div>
+      <div is="hint-player" id="1"></div>
+      <div is="hint-player" id="2"></div>
     </div>
   </div>
   <div class="progress">

@@ -9,7 +9,7 @@ namespace FoxStevenle.API.Controllers;
 public class GuessController(ILogger<GuessController> logger) : ControllerBase
 {
     [HttpPost]
-    public ActionResult<GuessResponseDto> Guess([FromBody] GuessDto guess)
+    public async Task<ActionResult<GuessResponseDto>> Guess([FromBody] Guess guess)
     {
         if (string.IsNullOrWhiteSpace(guess.Text))
         {
@@ -20,7 +20,7 @@ public class GuessController(ILogger<GuessController> logger) : ControllerBase
         return Ok(new GuessResponseDto
         {
             Result = success ? GuessResult.Success : GuessResult.Fail,
-            Song = success
+            Song = success || guess.GuessIndex >= 2
                 ? new SongDto
                 {
                     Title = "That Choice",

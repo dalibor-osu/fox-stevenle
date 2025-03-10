@@ -1,10 +1,10 @@
-var builder = WebApplication.CreateBuilder(args);
+using FoxStevenle.API;
+using FoxStevenle.API.Database;
+using Microsoft.EntityFrameworkCore;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+var builder = WebApplication
+    .CreateBuilder(args)
+    .Configure();
 
 var app = builder.Build();
 
@@ -14,10 +14,17 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<FoxStevenleDatabaseContext>();
+
+    await dbContext.Database.MigrateAsync();
+}
+
+#if !DEBUG
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
+#endif
 app.MapControllers();
 
 await app.RunAsync();

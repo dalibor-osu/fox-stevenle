@@ -1,3 +1,7 @@
+body {
+  background-color: darkgray;
+}
+
 .header {
   margin: 50px;
   align-items: center;
@@ -34,4 +38,11 @@ media-player {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   cursor: not-allowed;
+}
+
+.guess-form-container {
+  display: block;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
 }

@@ -1,6 +1,36 @@
 ﻿services:
-  foxstevenle.api:
-    image: foxstevenle.api
+  database-postgresql:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./PostgreSQL/Init.Development.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - services
+
+  foxstevenle-api:
+    image: foxstevenle-api
     build:
       context: .
       dockerfile: FoxStevenle.API/Dockerfile
+      args:
+        BUILD_CONFIGURATION: Release
+    ports:
+      - '5200:5200'
+    volumes:
+      - ../hints:/hints
+    depends_on:
+      - database-postgresql
+    networks:
+      - services
+
+networks:
+  services:
+
+volumes:
+  postgres:
