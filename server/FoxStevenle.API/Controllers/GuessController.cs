@@ -24,7 +24,8 @@ public class GuessController(ILogger<GuessController> logger) : ControllerBase
                 ? new SongDto
                 {
                     Title = "That Choice",
-                    Url = "https://open.spotify.com/track/0ksr2OxjHuuFXFS2pn7lTa?si=73985140255e4d27"
+                    Url = "https://open.spotify.com/track/0ksr2OxjHuuFXFS2pn7lTa?si=73985140255e4d27",
+                    CoverUrl = "https://i.scdn.co/image/ab67616d00001e02381bb1d092b6df71591ad55d"
                 }
                 : null,
         });

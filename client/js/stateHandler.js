@@ -49,23 +49,25 @@ const createDefaultStateForDate = (date) => {
 }
 
 const getStateForDate = (date = null) => {
-  date = date ?? new Date();
+  date = date ?? getCurrentDate();
   const key = dateHelper.createKeyForDate(date);
   const state = window.localStorage.getItem(key);
   if (state == null) {
-    return createDefaultStateForDate(date);
+    const newState = createDefaultStateForDate(date);
+    setStateForDate(newState, date);
+    return newState;
   }
   return JSON.parse(state);
 }
 
 const setStateForDate = (state, date = null) => {
-  date = date ?? new Date();
+  date = date ?? getCurrentDate();
   const key = dateHelper.createKeyForDate(date);
   window.localStorage.setItem(key, JSON.stringify(state));
 }
 
 const handleGuess = async (guess, date = null) => {
-  date = date ?? new Date();
+  date = date ?? getCurrentDate();
   const state = getStateForDate(date);
   if (state == null) {
     console.error("Failed to get state for date", date);
@@ -91,13 +93,14 @@ const handleGuess = async (guess, date = null) => {
     songState.success = true;
   }
 
-  songState.guessHistory[songState.guessIndex++] = response.result;
+  songState.guessHistory[songState.guessIndex] = response.result;
+  songState.guessIndex++;
   if (response.song != null) {
     songState.songInfo = response.song;
   }
 
   setStateForDate(state, date);
-  return response;
+  return { response, state };
 }
 
 const stateHandler = {

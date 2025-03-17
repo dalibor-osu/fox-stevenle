@@ -1,5 +1,6 @@
 body {
-  background-color: darkgray;
+  background-color: orange;
+  font-family: "Roboto";
 }
 
 .header {
@@ -11,6 +12,8 @@ body {
 .header-text {
   display: block;
   text-align: center;
+  font-size: 5em;
+  font-weight: bold;
 }
 
 media-player {
@@ -25,7 +28,12 @@ media-player {
 }
 
 .hint-row {
-  width: 100%;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
+}
+
+.center {
   align-items: center;
   text-align: center;
 }
@@ -38,6 +46,7 @@ media-player {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   cursor: not-allowed;
+  border-radius: 2000px;
 }
 
 .guess-form-container {
@@ -45,4 +54,12 @@ media-player {
   align-items: center;
   text-align: center;
   margin: 10px;
+}
+
+.progress {
+  margin: 10px;
+}
+
+.song-image {
+  margin-bottom: 10px;
 }

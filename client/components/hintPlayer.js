@@ -14,7 +14,6 @@ export default class HintPlayer extends HTMLDivElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`Attribute ${name} has changed.`);
     if (name === "id") {
       this.#createPlayer(newValue);
     }

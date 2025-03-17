@@ -1,12 +1,18 @@
 import HintPlayer from "./hintPlayer.js";
+import SongContainer from "./songContainer.js";
 
 const components = [
-  HintPlayer
+  HintPlayer,
+  SongContainer
 ]
 
 const register = () => {
   for (const component of components) {
-    window.customElements.define(component.componentName, component, { extends: "div" });
+    if (component.prototype instanceof HTMLDivElement) {
+      window.customElements.define(component.componentName, component, { extends: "div" });
+      continue;
+    }
+    window.customElements.define(component.componentName, component);
   }
 }
 
