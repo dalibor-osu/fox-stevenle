@@ -22,7 +22,7 @@ namespace FoxStevenle.API.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    date = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,6 +37,8 @@ namespace FoxStevenle.API.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    authors = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    suffix = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     cover_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     duration = table.Column<int>(type: "integer", nullable: false)

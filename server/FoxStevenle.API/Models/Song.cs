@@ -18,6 +18,15 @@ public class Song : IIdentifiable
     [Required]
     public string Title { get; set; } = string.Empty;
     
+    [Column(SongTable.Authors)]
+    [MaxLength(128)]
+    [Required]
+    public string Authors { get; set; } = string.Empty;
+    
+    [Column(SongTable.Suffix)]
+    [MaxLength(128)]
+    public string Suffix { get; set; } = string.Empty;
+    
     [Column(SongTable.Url)]
     [MaxLength(256)]
     [Required]

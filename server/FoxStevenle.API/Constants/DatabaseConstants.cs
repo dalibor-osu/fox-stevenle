@@ -22,6 +22,8 @@ public static class DatabaseConstants
     {
         public const string TableName = "songs";
         public const string Title = "title";
+        public const string Authors = "authors";
+        public const string Suffix = "suffix";
         public const string Url = "url";
         public const string CoverUrl = "cover_url";
         public const string Duration = "duration";

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FoxStevenle.API.Migrations
 {
     [DbContext(typeof(FoxStevenleDatabaseContext))]
-    [Migration("20250225173715_Init")]
+    [Migration("20250318210132_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -35,8 +35,8 @@ namespace FoxStevenle.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date")
                         .HasColumnName("date");
 
                     b.HasKey("Id");
@@ -92,6 +92,12 @@ namespace FoxStevenle.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Authors")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("authors");
+
                     b.Property<string>("CoverUrl")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
@@ -100,6 +106,12 @@ namespace FoxStevenle.API.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("integer")
                         .HasColumnName("duration");
+
+                    b.Property<string>("Suffix")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("suffix");
 
                     b.Property<string>("Title")
                         .IsRequired()
