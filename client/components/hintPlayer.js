@@ -41,7 +41,7 @@ export default class HintPlayer extends HTMLDivElement {
 
     const source = document.createElement("source");
     source.type = "audio/mp3";
-    source.src = `${api.hint}/${dateHelper.createKeyForDate(stateHandler.getCurrentDate())}/${id}`;
+    source.src = `${api.hint}/${dateHelper.createKeyForDate(stateHandler.getCurrentDate())}/1/${id}`;
     audio.appendChild(source);
   }
 }

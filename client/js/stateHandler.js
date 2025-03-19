@@ -3,7 +3,6 @@ import { postJSON } from "./apiHelper.js";
 import api from "./api.js";
 import guessResult from "./enums/guessResult.js";
 
-const testDate = new Date(2025, 1, 26);
 const isValidDate = (dateString) => {
   const regex = /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$/;
   return regex.test(dateString);
@@ -13,7 +12,7 @@ const getCurrentDate = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const date = urlParams.get("date");
   if (date == null) {
-    return testDate; // TODO: replace this with current date
+    return new Date(); // TODO: replace this with current date
   }
 
   if (!isValidDate(date)) {

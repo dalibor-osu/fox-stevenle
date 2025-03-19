@@ -15,8 +15,8 @@ public class HintController(ILogger<HintController> logger, DailyQuizDatabaseSer
         private const string HintsFolder = "/hints";
     #endif
 
-    [HttpGet("{date}/{order:int}")]
-    public async Task<IActionResult> GetHint([FromRoute] string date, [FromRoute] int order)
+    [HttpGet("{date}/{songNumber:int}/{order:int}")]
+    public async Task<IActionResult> GetHint([FromRoute] string date, [FromRoute] int songNumber, [FromRoute] int order)
     {
         if (!DateOnly.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateOnly))
         {
@@ -30,6 +30,12 @@ public class HintController(ILogger<HintController> logger, DailyQuizDatabaseSer
                 { Message = "Order can be in range from 0 to 2", Type = OptionalErrorType.BadRequest }));
         }
         
+        if (songNumber is < 1 or > 5)
+        {
+            return CreateActionResultResponse(new Optional<string>(new OptionalError
+                { Message = "Song number can be in range from 1 to 5", Type = OptionalErrorType.BadRequest }));
+        }
+        
         var quiz = await dailyQuizDatabaseService.GetByDateAsync(dateOnly);
         if (quiz == null)
         {
@@ -38,7 +44,7 @@ public class HintController(ILogger<HintController> logger, DailyQuizDatabaseSer
         }
 
         
-        string relativeFilePath = $"{HintsFolder}/{date}/{order}.mp3";
+        string relativeFilePath = $"{HintsFolder}/{date}/{songNumber}/{order}.mp3";
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), relativeFilePath);
         if (!System.IO.File.Exists(filePath))
         {

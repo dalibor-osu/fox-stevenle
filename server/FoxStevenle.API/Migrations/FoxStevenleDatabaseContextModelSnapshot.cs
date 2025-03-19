@@ -104,6 +104,12 @@ namespace FoxStevenle.API.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("duration");
 
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("file_name");
+
                     b.Property<string>("Suffix")
                         .IsRequired()
                         .HasMaxLength(128)

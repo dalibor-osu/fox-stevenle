@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FoxStevenle.API.Migrations
 {
     [DbContext(typeof(FoxStevenleDatabaseContext))]
-    [Migration("20250318210132_Init")]
+    [Migration("20250319212654_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -106,6 +106,12 @@ namespace FoxStevenle.API.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("integer")
                         .HasColumnName("duration");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("file_name");
 
                     b.Property<string>("Suffix")
                         .IsRequired()

@@ -39,4 +39,9 @@ public class Song : IIdentifiable
     [Column(SongTable.Duration)]
     [Required]
     public int Duration { get; set; }
+    
+    [Column(SongTable.FileName)]
+    [MaxLength(128)]
+    [Required]
+    public string FileName { get; set; } = string.Empty;
 }

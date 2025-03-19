@@ -41,7 +41,8 @@ namespace FoxStevenle.API.Migrations
                     suffix = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     cover_url = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    duration = table.Column<int>(type: "integer", nullable: false)
+                    duration = table.Column<int>(type: "integer", nullable: false),
+                    file_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false)
                 },
                 constraints: table =>
                 {

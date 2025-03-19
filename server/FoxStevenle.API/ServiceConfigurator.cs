@@ -5,6 +5,10 @@ using FoxStevenle.API.Database;
 using FoxStevenle.API.Database.Handlers;
 using FoxStevenle.API.DatabaseServices;
 using FoxStevenle.API.Exceptions;
+using FoxStevenle.API.Jobs;
+using FoxStevenle.API.Utils;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -17,7 +21,7 @@ public static class ServiceConfigurator
         builder
             .ConfigureGeneral()
             .ConfigureDatabase()
-            .ConfigureManagers();
+            .ConfigureLocalServices();
         return builder;
     }
 
@@ -34,6 +38,15 @@ public static class ServiceConfigurator
             .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         builder.Services.AddMvc();
         builder.Services.AddOpenApi();
+        builder.Services.AddHangfire(config => config
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UsePostgreSqlStorage(x =>
+            {
+                x.UseNpgsqlConnection(builder.Configuration.GetConnectionString("PostgreSQL"));
+            }));
+        builder.Services.AddHangfireServer();
         return builder;
     }
     
@@ -57,13 +70,20 @@ public static class ServiceConfigurator
         
         builder.Services.AddScoped<QuizEntryDatabaseService>();
         builder.Services.AddScoped<DailyQuizDatabaseService>();
+        builder.Services.AddScoped<SongDatabaseService>();
         
         SqlMapper.AddTypeHandler(new SqlDateOnlyTypeHandler());
         return builder;
     }
     
-    private static WebApplicationBuilder ConfigureManagers(this WebApplicationBuilder builder)
+    private static WebApplicationBuilder ConfigureLocalServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddScoped<DailyQuizGenerator>();
+
+        // Jobs
+        builder.Services.AddHostedService<JobPlanner>();
+        builder.Services.AddHostedService<GenerateTenDaysService>();
+        builder.Services.AddScoped<CreateDailyQuizJob>();
         return builder;
     }
 }

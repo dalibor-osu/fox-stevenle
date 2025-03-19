@@ -9,7 +9,7 @@ public abstract class DatabaseServiceBase<T>(Func<IDbConnection> connectionFacto
 {
     protected Func<IDbConnection> ConnectionFactory { get; } = connectionFactory;
 
-    protected async Task<T> GetAsync(Guid id)
+    public async Task<T?> GetAsync(int id)
     {
         string query =
             $"""
@@ -18,10 +18,10 @@ public abstract class DatabaseServiceBase<T>(Func<IDbConnection> connectionFacto
              """;
 
         using var connection = ConnectionFactory();
-        return await connection.QuerySingleAsync<T>(query, new { id });
+        return await connection.QuerySingleOrDefaultAsync<T?>(query, new { id });
     }
 
-    protected async Task<bool> ExistsAsync(Guid id)
+    public async Task<bool> ExistsAsync(int id)
     {
         string query =
             $"""
@@ -33,5 +33,12 @@ public abstract class DatabaseServiceBase<T>(Func<IDbConnection> connectionFacto
 
         using var connection = ConnectionFactory();
         return await connection.QuerySingleAsync<bool>(query, new { id });
+    }
+
+    public async Task<int> CountAllAsync()
+    {
+        string query = $"SELECT COUNT(*) FROM {DatabaseConstants.DatabaseName}.{tableName};";
+        using var connection = ConnectionFactory();
+        return await connection.QuerySingleAsync<int>(query);
     }
 }

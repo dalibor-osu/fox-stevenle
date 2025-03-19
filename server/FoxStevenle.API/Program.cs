@@ -1,5 +1,7 @@
 using FoxStevenle.API;
 using FoxStevenle.API.Database;
+using FoxStevenle.API.Middleware;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication
@@ -12,6 +14,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseHangfireDashboard();
+    app.MapHangfireDashboard();
 }
 
 using (var scope = app.Services.CreateScope())
@@ -22,9 +26,12 @@ using (var scope = app.Services.CreateScope())
     await dbContext.Database.MigrateAsync();
 }
 
+app.UseMiddleware<ExceptionLoggingMiddleware>();
+
 #if !DEBUG
 app.UseHttpsRedirection();
 #endif
+
 app.MapControllers();
 
 await app.RunAsync();
