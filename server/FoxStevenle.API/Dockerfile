@@ -19,7 +19,7 @@ ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "FoxStevenle.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+RUN apt-get update && apt-get install -y ffmpeg
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN chmod 777 /app/fs_data
 ENTRYPOINT ["dotnet", "FoxStevenle.API.dll"]
