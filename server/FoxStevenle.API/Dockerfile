@@ -1,10 +1,11 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+USER root
+RUN apt-get update && apt-get install -y ffmpeg
 USER $APP_UID
 WORKDIR /app
 ARG PORT=5300
 EXPOSE ${PORT}
 ENV ASPNETCORE_URLS=http://+:${PORT}
-RUN apt-get update && apt-get install -y ffmpeg
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
