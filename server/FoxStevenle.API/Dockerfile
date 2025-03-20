@@ -21,4 +21,5 @@ RUN dotnet publish "FoxStevenle.API.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN chmod 777 /app/fs_data
 ENTRYPOINT ["dotnet", "FoxStevenle.API.dll"]
