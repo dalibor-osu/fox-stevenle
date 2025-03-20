@@ -12,7 +12,7 @@ public static class GeneralConstants
     public const string HintsDir = "../../hints";
     public const string SongsDir = "../../songs";
 #else
-    public const string HintsDir = "/fs_data/hints";
-    public const string SongsDir = "/fs_data/songs";
+    public const string HintsDir = "/app/fs_data/hints";
+    public const string SongsDir = "/app/fs_data/songs";
 #endif
 }
