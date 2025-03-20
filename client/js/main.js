@@ -2,6 +2,9 @@ import stateHandler from "./stateHandler.js"
 import guessResult from "./enums/guessResult.js";
 import componentRegistry from "../components/componentRegistry.js";
 import SongContainer from "../components/songContainer.js";
+import api from "./api.js";
+import { get } from "./apiHelper.js";
+import dateHelper from "./dateHelper.js";
 
 // localStorage.clear();
 
@@ -15,11 +18,17 @@ const canGuess = (state) => {
 const renderState = (state) => {
   const progressText = document.getElementById("progress-text");
   const songState = state.songState[state.songIndex];
-  document.getElementById("hint-disable-0")?.remove();
 
   if (songState.songInfo != null) {
     document.getElementById("song-container").render(songState.songInfo);
   }
+
+  for (let i = 0; i < 3; i++) {
+    const hintPlayer = document.getElementById(`hint-player-${i}`);
+    hintPlayer?.create(i, state.songIndex + 1, dateHelper.createKeyForDate(stateHandler.getCurrentDate()));
+  }
+
+  document.getElementById("hint-disable-0")?.remove();
 
   songState.guessHistory.forEach((guess, i) => {
     if (guess == null) {
@@ -40,10 +49,52 @@ const renderState = (state) => {
         break;
     }
   });
+
 }
 
 const setup = async () => {
-  const setupState = stateHandler.getStateForDate();
+  window.transitionToPage = function(href) {
+    document.querySelector('body').style.opacity = 0
+    setTimeout(function() {
+      window.location.href = href
+    }, 200)
+  }
+
+  document.querySelector('body').style.opacity = 1
+
+  const countdownInterval = setInterval(() => {
+    const currentTime = new Date();
+    const currentUTCDate = new Date(Date.UTC(currentTime.getUTCFullYear(), currentTime.getUTCMonth(), currentTime.getUTCDate(), currentTime.getUTCHours(), currentTime.getUTCMinutes(), currentTime.getUTCSeconds(), currentTime.getUTCMilliseconds()));
+    const nextDayUTC = new Date(Date.UTC(currentTime.getUTCFullYear(), currentTime.getUTCMonth(), currentTime.getUTCDate() + 1));
+    let difference = Math.ceil((nextDayUTC.getTime() - currentUTCDate.getTime()) / 1000);
+    let hours, minutes, seconds = 0;
+
+    if (difference / 3600 > 0) {
+      hours = Math.floor(difference / 3600);
+      difference -= 3600 * hours;
+    }
+
+    if (difference / 60 > 0) {
+      minutes = Math.floor(difference / 60);
+      difference -= 60 * minutes;
+    }
+
+    seconds = difference;
+
+    const hoursText = hours > 9 ? hours : `0${hours}`;
+    const minutesText = minutes > 9 ? minutes : `0${minutes}`;
+    const secondsText = seconds > 9 ? seconds : `0${seconds}`;
+
+    document.getElementById("timer-time").innerText = `${hoursText}:${minutesText}:${secondsText}`;
+  }, 1000);
+
+  const setupState = stateHandler.getInitializedState();
+  const currentDate = stateHandler.getCurrentDate();
+  const existsUrl = `${api.dailyQuizExistsByDate}/${dateHelper.createKeyForDate(currentDate)}`;
+  const existsResult = await get(existsUrl);
+  if (existsResult.status != 200 && window.location.search != null && window.location.search !== "") {
+    window.location.search = "";
+  }
 
   componentRegistry.register();
   const guessSubmitForm = document.getElementById("guess-form");

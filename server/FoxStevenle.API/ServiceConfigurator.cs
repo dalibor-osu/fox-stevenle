@@ -16,6 +16,11 @@ namespace FoxStevenle.API;
 
 public static class ServiceConfigurator
 {
+    /// <summary>
+    /// Configures all services needed by the app
+    /// </summary>
+    /// <param name="builder"><see cref="WebApplicationBuilder"/> to use</param>
+    /// <returns>Enriched <see cref="WebApplicationBuilder"/></returns>
     public static WebApplicationBuilder Configure(this WebApplicationBuilder builder)
     {
         builder
@@ -30,7 +35,7 @@ public static class ServiceConfigurator
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalhost", b =>
-                b.WithOrigins("http://localhost:8000", "http://0.0.0.0:8000")  // Frontend URL
+                b.WithOrigins("http://localhost:8000", "http://0.0.0.0:8000")
                     .AllowAnyMethod()
                     .AllowAnyHeader());
         });
@@ -82,7 +87,7 @@ public static class ServiceConfigurator
 
         // Jobs
         builder.Services.AddHostedService<JobPlanner>();
-        builder.Services.AddHostedService<GenerateTenDaysService>();
+        builder.Services.AddHostedService<GenerateTodayService>();
         builder.Services.AddScoped<CreateDailyQuizJob>();
         return builder;
     }

@@ -13,8 +13,10 @@
 
 <body>
   <div id="main">
+    <div class="timer center"><p>Next quiz in: </p><p id="timer-time"></p></div>
     <div class="header">
       <h1 class="header-text">FOX STEVENLE</h1>
+      <p class="header-description">A daily Fox Stevenson songs guessing game!</p>
     </div>
     <div class="guess-form-container">
       <form id="guess-form">
@@ -22,9 +24,9 @@
       </form>
     </div>
     <div class="hint-container center" id="hint-container">
-      <div is="hint-player" id="0"></div>
-      <div is="hint-player" id="1"></div>
-      <div is="hint-player" id="2"></div>
+      <div is="hint-player" id="hint-player-0"></div>
+      <div is="hint-player" id="hint-player-1"></div>
+      <div is="hint-player" id="hint-player-2"></div>
     </div>
     <div class="progress center">
       <p class="progress-text" id="progress-text">

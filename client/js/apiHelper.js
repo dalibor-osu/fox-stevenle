@@ -1,4 +1,3 @@
-
 const postJSON = async (path, data) => {
   const result = await fetch(`${path}`, {
     method: "POST",
@@ -16,4 +15,10 @@ const postJSON = async (path, data) => {
   }
 }
 
-export { postJSON };
+const get = async (path) => {
+  return await fetch(path, {
+    method: "GET"
+  });
+}
+
+export { postJSON, get };

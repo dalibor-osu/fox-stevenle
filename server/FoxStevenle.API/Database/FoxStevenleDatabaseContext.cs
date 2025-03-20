@@ -13,6 +13,7 @@ public class FoxStevenleDatabaseContext(DbContextOptions<FoxStevenleDatabaseCont
     public DbSet<Song> Songs { get; set; }
 
 
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(SchemaName);

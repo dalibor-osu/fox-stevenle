@@ -20,7 +20,7 @@
       context: .
       dockerfile: FoxStevenle.API/Dockerfile
       args:
-        BUILD_CONFIGURATION: Release
+        BUILD_CONFIGURATION: Development
     ports:
       - '5200:5200'
     volumes:
@@ -29,6 +29,8 @@
       - database-postgresql
     networks:
       - services
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
 
 networks:
   services:

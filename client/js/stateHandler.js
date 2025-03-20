@@ -7,6 +7,7 @@ const isValidDate = (dateString) => {
   const regex = /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$/;
   return regex.test(dateString);
 }
+const getUrlBase = () => window.location.protocol + '//' + window.location.host + window.location.pathname;
 
 const getCurrentDate = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -21,6 +22,37 @@ const getCurrentDate = () => {
   }
 
   return new Date(`${date}T00:00:00Z`);
+}
+
+const getCurrentSongNumber = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const state = getStateForDate();
+
+  if (!urlParams.has("song")) {
+    return state.songIndex + 1;
+  }
+
+  let number = Number(urlParams.get("song"));
+  if (isNaN(number) || number < 1 || number > 5) {
+    urlParams.delete("song");
+    window.transitionToPage(`${getUrlBase()}?${urlParams}`)
+  }
+
+  return number;
+}
+
+const getInitializedState = () => {
+  const state = getStateForDate();
+  let songNumber = getCurrentSongNumber();
+  if (songNumber > 5) {
+    songNumber = 5;
+  }
+
+  if (state.songIndex - 1 !== songNumber) {
+    state.songIndex = songNumber - 1;
+    setStateForDate(state);
+  }
+  return state;
 }
 
 const createDefaultStateForDate = (date) => {
@@ -45,6 +77,14 @@ const createDefaultStateForDate = (date) => {
   }
 
   return structuredClone(state);
+}
+
+const goToNextSong = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  let songNumber = Number(urlParams.get("song"));
+  songNumber = isNaN(songNumber) || songNumber === 0 ? 2 : songNumber + 1;
+  urlParams.set("song", `${songNumber}`);
+  window.transitionToPage(`${getUrlBase()}?${urlParams}`);
 }
 
 const getStateForDate = (date = null) => {
@@ -106,7 +146,10 @@ const stateHandler = {
   getCurrentDate,
   getStateForDate,
   setStateForDate,
-  handleGuess
+  handleGuess,
+  goToNextSong,
+  getInitializedState,
+  getCurrentSongNumber
 };
 
 export default stateHandler;

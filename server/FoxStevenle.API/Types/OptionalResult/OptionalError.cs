@@ -1,7 +1,17 @@
 namespace FoxStevenle.API.Types.OptionalResult;
 
+/// <summary>
+/// Wrapper with info about an error that occured
+/// </summary>
 public class OptionalError
 {
-    public string Message { get; set; }
-    public OptionalErrorType Type { get; set; }
+    /// <summary>
+    /// Message of the error
+    /// </summary>
+    public string Message { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Type of the error
+    /// </summary>
+    public OptionalErrorType Type { get; set; } = OptionalErrorType.Unknown;
 }

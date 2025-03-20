@@ -11,8 +11,13 @@ namespace FoxStevenle.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class GuessController(ILogger<GuessController> logger, QuizEntryDatabaseService quizEntryDatabaseService)
-    : ControllerBase
+    : ControllerBase(logger)
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="guess"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Guess([FromBody] Guess guess)
     {
@@ -27,7 +32,13 @@ public class GuessController(ILogger<GuessController> logger, QuizEntryDatabaseS
             return BadRequest("Invalid date");
         }
 
-        var quizEntry = await quizEntryDatabaseService.GetFullForDateAndSongNumber(guessDate.Value, guess.SongIndex + 1);
+        if (guessDate > DateOnlyHelper.GetCurrentDateOnly())
+        {
+            return NotFound();
+        }
+
+        var quizEntry =
+            await quizEntryDatabaseService.GetFullForDateAndSongNumber(guessDate.Value, guess.SongIndex + 1);
         if (quizEntry is null)
         {
             return NotFound();

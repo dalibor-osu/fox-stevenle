@@ -4,7 +4,6 @@ WORKDIR /app
 ARG PORT=5200
 EXPOSE ${PORT}
 ENV ASPNETCORE_URLS=http://+:${PORT}
-ENV ASPNETCORE_ENVIRONMENT=Development
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release

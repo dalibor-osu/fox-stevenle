@@ -1,6 +1,8 @@
 body {
   background-color: orange;
   font-family: "Roboto";
+  opacity: 0;
+  transition: opacity .2s;
 }
 
 .header {
@@ -62,4 +64,9 @@ media-player {
 
 .song-image {
   margin-bottom: 10px;
+  width: 30em;
+}
+
+button {
+  margin: 10px;
 }

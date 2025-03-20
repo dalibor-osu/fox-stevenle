@@ -13,6 +13,10 @@ public class DailyQuizGenerator(
     DailyQuizDatabaseService dailyQuizDatabaseService,
     QuizEntryDatabaseService quizEntryDatabaseService)
 {
+    /// <summary>
+    /// Generates a daily quiz for the specified date including hints
+    /// </summary>
+    /// <param name="date">Date to create the quiz for</param>
     public async Task GenerateForDate(DateOnly date)
     {
         bool exists = await dailyQuizDatabaseService.GetByDateAsync(date) != null;
@@ -23,7 +27,7 @@ public class DailyQuizGenerator(
         }
 
         var quiz = new DailyQuiz { Date = date };
-        quiz.Id = await dailyQuizDatabaseService.InsertAsync(quiz);
+        quiz.Id = await dailyQuizDatabaseService.AddAsync(quiz);
 
         int songCount = await songDatabaseService.CountAllAsync();
 
@@ -59,7 +63,7 @@ public class DailyQuizGenerator(
 
         foreach (var quizEntry in quizEntries)
         {
-            await quizEntryDatabaseService.InsertAsync(quizEntry);
+            await quizEntryDatabaseService.AddAsync(quizEntry);
         }
     }
 

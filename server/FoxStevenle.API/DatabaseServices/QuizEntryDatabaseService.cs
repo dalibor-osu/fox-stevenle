@@ -9,18 +9,12 @@ namespace FoxStevenle.API.DatabaseServices;
 public class QuizEntryDatabaseService(Func<IDbConnection> connectionFactory)
     : DatabaseServiceBase<QuizEntry>(connectionFactory, QuizEntryTable.TableName)
 {
-//     public bool ExistsByGuess(Guess guess)
-//     {
-//         const string query =
-//             $"""
-//                  SELECT EXISTS (
-//                      SELECT 1 FROM {DatabaseConstants.DatabaseName}.""
-//                          WHERE {IIdentifiable.ColumnName} ilike @text,
-//                  );
-//              """;
-//     }
-
-    public async Task<int> InsertAsync(QuizEntry quizEntry)
+    /// <summary>
+    /// Adds a new <see cref="QuizEntry"/> to the database
+    /// </summary>
+    /// <param name="quizEntry"><see cref="QuizEntry"/> to add</param>
+    /// <returns>ID of the new record</returns>
+    public async Task<int> AddAsync(QuizEntry quizEntry)
     {
         const string query =
             $"""
@@ -41,6 +35,12 @@ public class QuizEntryDatabaseService(Func<IDbConnection> connectionFactory)
         return await connection.QueryFirstAsync<int>(query, quizEntry);
     }
 
+    /// <summary>
+    /// Gets a full (with filled <see cref="Song"/> and <see cref="DailyQuiz"/>) <see cref="QuizEntry"/>  by date and song number
+    /// </summary>
+    /// <param name="date">Date to get the <see cref="QuizEntry"/> for</param>
+    /// <param name="songNumber">Number of a song to get the <see cref="QuizEntry"/> for</param>
+    /// <returns>Retrieved <see cref="QuizEntry"/> or null</returns>
     public async Task<QuizEntry?> GetFullForDateAndSongNumber(DateOnly date, int songNumber)
     {
         const string query =

@@ -8,6 +8,11 @@ namespace FoxStevenle.API.DatabaseServices;
 
 public class DailyQuizDatabaseService(Func<IDbConnection> connectionFactory) : DatabaseServiceBase<DailyQuiz>(connectionFactory, DatabaseConstants.DailyQuizTable.TableName)
 {
+    /// <summary>
+    /// Gets the <see cref="DailyQuiz"/> by date
+    /// </summary>
+    /// <param name="date">Date to get the <see cref="DailyQuiz"/> for</param>
+    /// <returns>Retrieved <see cref="DailyQuiz"/> or null</returns>
     public async Task<DailyQuiz?> GetByDateAsync(DateOnly date)
     {
         const string query = 
@@ -20,7 +25,20 @@ public class DailyQuizDatabaseService(Func<IDbConnection> connectionFactory) : D
         return await connection.QueryFirstOrDefaultAsync<DailyQuiz?>(query, new { date });
     }
 
-    public async Task<int> InsertAsync(DailyQuiz dailyQuiz)
+    /// <summary>
+    /// Checks if <see cref="DailyQuiz"/> exists for the specified date
+    /// </summary>
+    /// <param name="date">Date to check the <see cref="DailyQuiz"/> for</param>
+    /// <returns>true if <see cref="DailyQuiz"/> exists, false if not</returns>
+    public async Task<bool> ExistsByDateAsync(DateOnly date) => await GetByDateAsync(date) != null;
+    
+
+    /// <summary>
+    /// Adds a new <see cref="DailyQuiz"/> to the database
+    /// </summary>
+    /// <param name="dailyQuiz"><see cref="DailyQuiz"/> to add</param>
+    /// <returns>ID of the new record</returns>
+    public async Task<int> AddAsync(DailyQuiz dailyQuiz)
     {
         const string query = 
             $"""

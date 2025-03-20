@@ -2,6 +2,10 @@ using FoxStevenle.API.Utils;
 
 namespace FoxStevenle.API.Jobs;
 
+/// <summary>
+/// Runs daily to create a new quiz for the next day
+/// </summary>
+/// <param name="serviceProvider">Provider of the required services</param>
 public class CreateDailyQuizJob(IServiceProvider serviceProvider)
 {
     public async Task Run()

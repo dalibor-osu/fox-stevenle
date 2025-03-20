@@ -1,3 +1,4 @@
+import stateHandler from "../js/stateHandler.js";
 import htmlUtils from "../util/html.js";
 
 export default class SongContainer extends HTMLElement {
@@ -8,7 +9,6 @@ export default class SongContainer extends HTMLElement {
   }
 
   render(songInfo) {
-    console.log("render");
     const mainContainer = htmlUtils.createElementWithAttributes("div", { class: "song-container center" });
 
     const title = htmlUtils.createElementWithAttributes("p", { id: "test" });
@@ -22,6 +22,11 @@ export default class SongContainer extends HTMLElement {
       mainContainer.appendChild(image);
     }
     mainContainer.appendChild(link);
+
+    var nextSongButton = htmlUtils.createElementWithAttributes("button");
+    nextSongButton.innerText = "Next";
+    nextSongButton.onclick = () => stateHandler.goToNextSong();
+    mainContainer.appendChild(nextSongButton);
 
     this.appendChild(mainContainer);
   }

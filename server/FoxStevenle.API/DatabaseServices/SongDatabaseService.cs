@@ -4,7 +4,4 @@ using FoxStevenle.API.Models;
 
 namespace FoxStevenle.API.DatabaseServices;
 
-public class SongDatabaseService(Func<IDbConnection> connectionFactory) : DatabaseServiceBase<Song>(connectionFactory, DatabaseConstants.SongTable.TableName)
-{
-    
-}
+public class SongDatabaseService(Func<IDbConnection> connectionFactory) : DatabaseServiceBase<Song>(connectionFactory, DatabaseConstants.SongTable.TableName);

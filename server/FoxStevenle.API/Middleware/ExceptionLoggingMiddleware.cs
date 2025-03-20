@@ -4,6 +4,11 @@ using Newtonsoft.Json;
 
 namespace FoxStevenle.API.Middleware;
 
+/// <summary>
+/// Middleware that logs any error that occurs when processing the request
+/// </summary>
+/// <param name="next"></param>
+/// <param name="logger"></param>
 public class ExceptionLoggingMiddleware(RequestDelegate next, ILogger<ExceptionLoggingMiddleware> logger)
 {
     public async Task Invoke(HttpContext context)
