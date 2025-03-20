@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
-ARG PORT=5200
+ARG PORT=5300
 EXPOSE ${PORT}
 ENV ASPNETCORE_URLS=http://+:${PORT}
 

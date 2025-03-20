@@ -16,16 +16,13 @@ public class GenerateTodayService(IServiceProvider serviceProvider) : Background
         var dailyQuizDatabaseService = serviceProvider.GetRequiredService<DailyQuizDatabaseService>();
         var currentDate = DateOnlyHelper.GetCurrentDateOnly();
 
-        if (!await dailyQuizDatabaseService.ExistsByDateAsync(currentDate))
+        if (await dailyQuizDatabaseService.ExistsByDateAsync(currentDate))
         {
             logger.LogInformation("Quiz for today ({Date}) exists. Skipping creation...", currentDate);
             return;
         }
 
         var generator = scope.ServiceProvider.GetRequiredService<DailyQuizGenerator>();
-        for (int i = 0; i < 10; i++)
-        {
-            await generator.GenerateForDate(currentDate.AddDays(i));
-        }
+        await generator.GenerateForDate(currentDate);
     }
 }
