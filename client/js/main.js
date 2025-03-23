@@ -19,7 +19,7 @@ const renderState = (state) => {
   }
 
   if (songState.songInfo != null) {
-    document.getElementById("song-container").render(songState.songInfo);
+    document.getElementById("song-container").render(songState.songInfo, stateHandler.getCurrentSongNumber() >= 5);
   }
 
   for (let i = 0; i < 3; i++) {
@@ -126,7 +126,7 @@ const setup = async () => {
         document.getElementById(`hint-disable-${state.songState[state.songIndex].guessIndex}`)?.remove();
       }
       if (response.song != null) {
-        songContainer.render(response.song, stateHandler.getCurrentSongNumber() < 5);
+        songContainer.render(response.song, stateHandler.getCurrentSongNumber() >= 5);
       }
     }
   })

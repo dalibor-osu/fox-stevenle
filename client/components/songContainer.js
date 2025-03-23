@@ -8,7 +8,7 @@ export default class SongContainer extends HTMLElement {
     super();
   }
 
-  render(songInfo, renderButton) {
+  render(songInfo, isLast) {
     const mainContainer = htmlUtils.createElementWithAttributes("div", { class: "song-container center" });
 
     const title = htmlUtils.createElementWithAttributes("p");
@@ -28,7 +28,16 @@ export default class SongContainer extends HTMLElement {
     mainContainer.appendChild(link);
     mainContainer.appendChild(authors);
 
-    if (renderButton) {
+    if (isLast) {
+      var copyResultButton = htmlUtils.createElementWithAttributes("button");
+      copyResultButton.innerText = "Copy Result";
+      copyResultButton.onclick = () => {
+        stateHandler.getResultText();
+        copyResultButton.innerText = "Copied!"
+      };
+      mainContainer.appendChild(copyResultButton);
+
+    } else {
       var nextSongButton = htmlUtils.createElementWithAttributes("button");
       nextSongButton.innerText = "Next";
       nextSongButton.onclick = () => stateHandler.goToNextSong();
@@ -36,6 +45,7 @@ export default class SongContainer extends HTMLElement {
     }
 
     this.appendChild(mainContainer);
+    this.style.opacity = 1;
   }
 
   clear() {

@@ -167,6 +167,44 @@ const handleGuess = async (guess, date = null) => {
   return { response, state };
 }
 
+const getResultText = (date) => {
+  if (date == null) {
+    date = getCurrentDate();
+  }
+
+  const state = getStateForDate(date);
+  let text = `Fox Stevenle: ${dateHelper.createKeyForDate(date)}\n`;
+  for (let i = 0; i < state.songState.length; i++) {
+    const songState = state.songState[i];
+    if (songState == null) {
+      continue;
+    }
+
+    let songRow = "";
+    for (const guess of songState.guessHistory) {
+      switch (guess) {
+        case guessResult.success:
+          songRow += "🟩";
+          break;
+        case guessResult.skip:
+          songRow += "⬛";
+          break;
+        case guessResult.fail:
+          songRow += "🟥";
+          break;
+        default:
+          continue;
+      }
+    }
+
+    songRow += "\n";
+    text += songRow;
+  }
+
+  text += "<https://foxstevenle.com>";
+  navigator.clipboard.writeText(text);
+}
+
 const stateHandler = {
   getCurrentDate,
   getStateForDate,
@@ -177,7 +215,8 @@ const stateHandler = {
   getInitializedState,
   getCurrentSongNumber,
   clear,
-  stateVersion
+  stateVersion,
+  getResultText
 };
 
 export default stateHandler;
