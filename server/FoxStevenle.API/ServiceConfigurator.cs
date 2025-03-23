@@ -10,6 +10,7 @@ using FoxStevenle.API.Utils;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Configuration;
 using Npgsql;
 
 namespace FoxStevenle.API;

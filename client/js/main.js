@@ -1,14 +1,9 @@
 import stateHandler from "./stateHandler.js"
 import guessResult from "./enums/guessResult.js";
 import componentRegistry from "../components/componentRegistry.js";
-import SongContainer from "../components/songContainer.js";
 import api from "./api.js";
 import { get } from "./apiHelper.js";
 import dateHelper from "./dateHelper.js";
-
-// localStorage.clear();
-
-const hintCount = 3;
 
 const canGuess = (state) => {
   const songState = state.songState[state.songIndex];
@@ -17,7 +12,11 @@ const canGuess = (state) => {
 
 const renderState = (state) => {
   const progressText = document.getElementById("progress-text");
-  const songState = state.songState[state.songIndex];
+  const songState = state.songState[stateHandler.getCurrentSongNumber() - 1];
+  if (songState == null) {
+    stateHandler.goToSong(1);
+    return;
+  }
 
   if (songState.songInfo != null) {
     document.getElementById("song-container").render(songState.songInfo);
@@ -25,7 +24,7 @@ const renderState = (state) => {
 
   for (let i = 0; i < 3; i++) {
     const hintPlayer = document.getElementById(`hint-player-${i}`);
-    hintPlayer?.create(i, state.songIndex + 1, dateHelper.createKeyForDate(stateHandler.getCurrentDate()));
+    hintPlayer?.create(i, stateHandler.getCurrentSongNumber(), dateHelper.createKeyForDate(stateHandler.getCurrentDate()));
   }
 
   document.getElementById("hint-disable-0")?.remove();
@@ -52,6 +51,37 @@ const renderState = (state) => {
 
 }
 
+const updateCountdown = () => {
+  const currentTime = new Date();
+  const currentUTCDate = new Date(Date.UTC(currentTime.getUTCFullYear(), currentTime.getUTCMonth(), currentTime.getUTCDate(), currentTime.getUTCHours(), currentTime.getUTCMinutes(), currentTime.getUTCSeconds(), currentTime.getUTCMilliseconds()));
+  const nextDayUTC = new Date(Date.UTC(currentTime.getUTCFullYear(), currentTime.getUTCMonth(), currentTime.getUTCDate() + 1));
+  let difference = Math.ceil((nextDayUTC.getTime() - currentUTCDate.getTime()) / 1000);
+  let hours, minutes, seconds = 0;
+
+  if (difference / 3600 > 0) {
+    hours = Math.floor(difference / 3600);
+    difference -= 3600 * hours;
+  }
+
+  if (difference / 60 > 0) {
+    minutes = Math.floor(difference / 60);
+    difference -= 60 * minutes;
+  }
+
+  seconds = difference;
+
+  const hoursText = hours > 9 ? hours : `0${hours}`;
+  const minutesText = minutes > 9 ? minutes : `0${minutes}`;
+  const secondsText = seconds > 9 ? seconds : `0${seconds}`;
+
+  document.getElementById("timer-time").innerText = `${hoursText}:${minutesText}:${secondsText}`;
+}
+
+const showDisclaimer = () => {
+  const text = "Hello! Welcome to FOX STEVENLE, a daily Fox Stevenson song guessing game. This website is still under heavy development and not everything might work correctly! If you run into any issues, you can let me know on Discord: dalibor. Thank you and have fun!\n- Dalibor"
+  alert(text);
+}
+
 const setup = async () => {
   window.transitionToPage = function(href) {
     document.querySelector('body').style.opacity = 0
@@ -62,31 +92,8 @@ const setup = async () => {
 
   document.querySelector('body').style.opacity = 1
 
-  const countdownInterval = setInterval(() => {
-    const currentTime = new Date();
-    const currentUTCDate = new Date(Date.UTC(currentTime.getUTCFullYear(), currentTime.getUTCMonth(), currentTime.getUTCDate(), currentTime.getUTCHours(), currentTime.getUTCMinutes(), currentTime.getUTCSeconds(), currentTime.getUTCMilliseconds()));
-    const nextDayUTC = new Date(Date.UTC(currentTime.getUTCFullYear(), currentTime.getUTCMonth(), currentTime.getUTCDate() + 1));
-    let difference = Math.ceil((nextDayUTC.getTime() - currentUTCDate.getTime()) / 1000);
-    let hours, minutes, seconds = 0;
-
-    if (difference / 3600 > 0) {
-      hours = Math.floor(difference / 3600);
-      difference -= 3600 * hours;
-    }
-
-    if (difference / 60 > 0) {
-      minutes = Math.floor(difference / 60);
-      difference -= 60 * minutes;
-    }
-
-    seconds = difference;
-
-    const hoursText = hours > 9 ? hours : `0${hours}`;
-    const minutesText = minutes > 9 ? minutes : `0${minutes}`;
-    const secondsText = seconds > 9 ? seconds : `0${seconds}`;
-
-    document.getElementById("timer-time").innerText = `${hoursText}:${minutesText}:${secondsText}`;
-  }, 1000);
+  updateCountdown();
+  setInterval(() => updateCountdown(), 1000);
 
   const setupState = stateHandler.getInitializedState();
   const currentDate = stateHandler.getCurrentDate();
@@ -119,10 +126,16 @@ const setup = async () => {
         document.getElementById(`hint-disable-${state.songState[state.songIndex].guessIndex}`)?.remove();
       }
       if (response.song != null) {
-        songContainer.render(response.song);
+        songContainer.render(response.song, stateHandler.getCurrentSongNumber() < 5);
       }
     }
   })
+}
+
+// TODO: Remove this later
+if (localStorage.getItem("disclaimer") == null) {
+  localStorage.setItem("disclaimer", "");
+  showDisclaimer();
 }
 
 await setup();

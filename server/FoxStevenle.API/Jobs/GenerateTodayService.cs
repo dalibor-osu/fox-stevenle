@@ -13,7 +13,7 @@ public class GenerateTodayService(IServiceProvider serviceProvider) : Background
     {
         await using var scope = serviceProvider.CreateAsyncScope();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<GenerateTodayService>>();
-        var dailyQuizDatabaseService = serviceProvider.GetRequiredService<DailyQuizDatabaseService>();
+        var dailyQuizDatabaseService = scope.ServiceProvider.GetRequiredService<DailyQuizDatabaseService>();
         var currentDate = DateOnlyHelper.GetCurrentDateOnly();
 
         if (await dailyQuizDatabaseService.ExistsByDateAsync(currentDate))

@@ -13,7 +13,7 @@ public class SongDto
     /// <summary>
     /// Artist of the song
     /// </summary>
-    public string Artists { get; set; } = string.Empty;
+    public string Authors { get; set; } = string.Empty;
     
     /// <summary>
     /// Link to the song (mostly Spotify or Soundcloud)

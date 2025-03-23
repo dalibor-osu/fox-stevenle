@@ -60,7 +60,8 @@ public class GuessController(ILogger<GuessController> logger, QuizEntryDatabaseS
                 {
                     Title = song.Title,
                     Url = song.Url,
-                    CoverUrl = song.CoverUrl
+                    CoverUrl = song.CoverUrl,
+                    Authors = song.Authors
                 }
                 : null,
         });

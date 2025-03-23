@@ -8,11 +8,15 @@ export default class SongContainer extends HTMLElement {
     super();
   }
 
-  render(songInfo) {
+  render(songInfo, renderButton) {
     const mainContainer = htmlUtils.createElementWithAttributes("div", { class: "song-container center" });
 
-    const title = htmlUtils.createElementWithAttributes("p", { id: "test" });
+    const title = htmlUtils.createElementWithAttributes("p");
     title.innerText = songInfo.title;
+
+    const authors = htmlUtils.createElementWithAttributes("p");
+    authors.classList.add(["authors"]);
+    authors.innerText = songInfo.authors;
 
     const link = htmlUtils.createElementWithAttributes("a", { href: songInfo.url, target: "_blank" });
     link.appendChild(title);
@@ -22,11 +26,14 @@ export default class SongContainer extends HTMLElement {
       mainContainer.appendChild(image);
     }
     mainContainer.appendChild(link);
+    mainContainer.appendChild(authors);
 
-    var nextSongButton = htmlUtils.createElementWithAttributes("button");
-    nextSongButton.innerText = "Next";
-    nextSongButton.onclick = () => stateHandler.goToNextSong();
-    mainContainer.appendChild(nextSongButton);
+    if (renderButton) {
+      var nextSongButton = htmlUtils.createElementWithAttributes("button");
+      nextSongButton.innerText = "Next";
+      nextSongButton.onclick = () => stateHandler.goToNextSong();
+      mainContainer.appendChild(nextSongButton);
+    }
 
     this.appendChild(mainContainer);
   }

@@ -3,6 +3,18 @@ import { postJSON } from "./apiHelper.js";
 import api from "./api.js";
 import guessResult from "./enums/guessResult.js";
 
+const stateVersion = "beta";
+
+const clear = () => {
+  const sawDisclaimer = localStorage.getItem("disclaimer") != null;
+  localStorage.clear();
+  if (sawDisclaimer) {
+    localStorage.setItem("disclaimer", "");
+  }
+
+  localStorage.setItem("version", stateVersion);
+}
+
 const isValidDate = (dateString) => {
   const regex = /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$/;
   return regex.test(dateString);
@@ -42,6 +54,11 @@ const getCurrentSongNumber = () => {
 }
 
 const getInitializedState = () => {
+  const version = localStorage.getItem("version");
+  if (version == null || version !== stateVersion) {
+    clear()
+  }
+
   const state = getStateForDate();
   let songNumber = getCurrentSongNumber();
   if (songNumber > 5) {
@@ -52,6 +69,8 @@ const getInitializedState = () => {
     state.songIndex = songNumber - 1;
     setStateForDate(state);
   }
+
+
   return state;
 }
 
@@ -79,12 +98,18 @@ const createDefaultStateForDate = (date) => {
   return structuredClone(state);
 }
 
+const goToSong = (songNumber) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  songNumber = isNaN(songNumber) || songNumber < 1 || songNumber > 5 ? 1 : songNumber;
+  urlParams.set("song", `${songNumber}`);
+  window.transitionToPage(`${getUrlBase()}?${urlParams}`);
+}
+
 const goToNextSong = () => {
   const urlParams = new URLSearchParams(window.location.search);
   let songNumber = Number(urlParams.get("song"));
   songNumber = isNaN(songNumber) || songNumber === 0 ? 2 : songNumber + 1;
-  urlParams.set("song", `${songNumber}`);
-  window.transitionToPage(`${getUrlBase()}?${urlParams}`);
+  goToSong(songNumber);
 }
 
 const getStateForDate = (date = null) => {
@@ -148,8 +173,11 @@ const stateHandler = {
   setStateForDate,
   handleGuess,
   goToNextSong,
+  goToSong,
   getInitializedState,
-  getCurrentSongNumber
+  getCurrentSongNumber,
+  clear,
+  stateVersion
 };
 
 export default stateHandler;
