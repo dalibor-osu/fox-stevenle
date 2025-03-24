@@ -10,8 +10,8 @@ using FoxStevenle.API.Utils;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Configuration;
 using Npgsql;
+using Serilog;
 
 namespace FoxStevenle.API;
 
@@ -53,6 +53,13 @@ public static class ServiceConfigurator
                 x.UseNpgsqlConnection(builder.Configuration.GetConnectionString("PostgreSQL"));
             }));
         builder.Services.AddHangfireServer();
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .WriteTo.File(builder.Configuration.GetValue<string>("Logging:LogFile") ?? "./log.txt")
+            .CreateLogger();
+        builder.Host.UseSerilog();
         return builder;
     }
     

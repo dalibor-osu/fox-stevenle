@@ -19,6 +19,7 @@ public class DailyQuizGenerator(
     /// <param name="date">Date to create the quiz for</param>
     public async Task GenerateForDate(DateOnly date)
     {
+        logger.LogInformation("Generating daily quiz for {Date}", date.GetDateKey());
         bool exists = await dailyQuizDatabaseService.GetByDateAsync(date) != null;
         if (exists)
         {
@@ -42,6 +43,12 @@ public class DailyQuizGenerator(
             } while (quizEntries.Any(q => (q?.Song?.Id ?? -1) == randomId));
 
             var song = await songDatabaseService.GetAsync(randomId);
+            if (song == null)
+            {
+                logger.LogError("Song couldn't be retrieved from database! SongID: {SongId}", randomId);
+                return;
+            }
+
             quizEntries[i] = new QuizEntry
             {
                 QuizId = quiz.Id,
@@ -69,6 +76,7 @@ public class DailyQuizGenerator(
 
     private static async Task GenerateFilesForEntry(QuizEntry quizEntry, ILogger<DailyQuizGenerator> logger)
     {
+        logger.LogInformation("Creating files for Song: {Song}", quizEntry.Song?.Title);
         if (quizEntry.Song == null)
         {
             logger.LogCritical("Song is null");
